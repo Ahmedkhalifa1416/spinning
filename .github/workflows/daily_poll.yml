@@ -1,0 +1,27 @@
+name: Daily Telegram Poll
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # كل يوم الساعة 7 صباحًا بتوقيت مصر
+  workflow_dispatch:
+
+jobs:
+  send-poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install python-telegram-bot schedule flask
+
+      - name: Run bot
+        run: python main.py
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
